@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<p style="text-align: justify;"><h3>{{ blog.title }}</h3></p>
+<p style="text-align: justify;">{{ blog.content }}</p>
+<br>
+<footer  class="blockquote-footer"><a style="color: black;" href="{{ url_for("profile" , id=blog.owner.id)}}">  {{ blog.owner.username }} </a></footer>
+
+
+<br>
+<form action="{{url_for('add_comment')}}" method="post">
+<input type="hidden" id="blog_id" name="blog_id" value="{{ blog.id }}">
+<div class="form-group">
+    <label for="exampleFormControlTextarea1">Yorum</label>
+    <textarea class="form-control" name="comment" id="exampleFormControlTextarea1" rows="5"></textarea>
+</div>
+<br>
+<button type="submit" class="btn btn-primary btn-sm">Kaydet</button>
+</form>
+<br>
+<tbody>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+        <h3>Yorumlar</h3>
+        </div>
+    </div>
+{% for comment in blog.comments %} 
+    {% if comment.verify %}
+        <div class="row">
+            <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                <strong>{{ comment.owner.username }}</strong>
+                <span class="text-muted">{{ comment.created_date.strftime("%Y/%m/%d~%H:%M") }}</span>
+                </div>
+                <div class="panel-body"><p style="text-align: justify;">{{ comment.comment }}</p></div>
+            </div>
+            </div>
+        </div>
+    
+<br>
+    {% endif %}
+{% endfor %}           
+</tbody>
+{% endblock body %}

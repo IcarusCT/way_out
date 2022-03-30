@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<header class="py-5 bg-light border-bottom mb-4">
+<div class="container">
+    <div class="text-center my-5">
+        <h1 class="fw-bolder">Elif'in Bloguna Hoşgeldiniz!</h1>
+    </div>
+</div>
+</header>
+
+<!-- Featured blog post-->
+{% for blog in blogs %}
+<div class="card mb-4">
+<a href="#!"><img class="card-img-top" src="{{ url_for('static', filename = 'img/aaa.jpg') }}" alt="..." /></a>
+<div class="card-body">
+    
+    <div class="small text-muted">{{ blog.created_date.strftime("%Y/%m/%d~%H:%M") }}</div>
+    <h2 class="card-title">{{ blog.title }}</h2>
+    <p class="card-text">{{ blog.content[:41] }}...</p>
+    <a class="btn btn-primary" href="{{url_for("view" , id=blog.id)}}">Bloga Git →</a>
+     
+</div>
+</div>
+{% endfor %}
+{% endblock body %}
