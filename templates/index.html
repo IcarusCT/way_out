@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block head%}
+<style>
+    .card{
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock head%}
+
+{% block body %}
+{% for post in posts[::-1]%}
+<div class="card text-left">
+    <a href="{{url_for('view_post',id=post.id)}}" style="text-decoration: none;color:black;">
+       <div class="card-header">
+          <div class="row">
+                <div class="col-sm-6 text-left">
+                   <img class="rounded-circle" width="30" height="30"  src="https://chooksandchips.com/wp-content/uploads/2017/05/default2-1-1.jpg" data-holder-rendered="true">
+                   <b><span class="align-middle">{{post.owner.username}} | {{post.get_category()}}</span></b>
+                   <i class="fa fa-check" style="color: {{post.status_color()}}"></i><!--Eğer iş çözüme kavuştuysa falan aşamalara göre renklendir! -->
+                </div>
+                <div class="col-sm-6 text-right text-muted">
+                   <span class="align-middle">{{ post.created_date.strftime("%Y/%m/%d~%H:%M") }}</span>
+                </div>
+          </div>
+       </div>
+    </a>
+    <div class="card-body">
+    <p class="card-text">{{post.content}}</p>
+    {% if post.link!=''%}
+    <p class="card-text">Link: <a href="{{post.link}}" style="color:black;">{{post.link_text}}</a></p>
+    {% endif %}
+    </div>
+    <div class="card-footer text-muted">
+       <div class="row">
+          <div class="col-sm-6 text-left">
+                <b><span class="align-middle">{%if post.comments.__len__()!=0%}Comment{% endif %}</span></b>
+          </div>
+                <div class="col-sm-6 text-right text-muted">
+                   <a onclick=" {% if current_user.is_authenticated == True %}like_this({{post.id}}); {% endif %}return false;" class="" id="post_{{post.id}}" style="text-decoration: none; {% if post.liked() %}color: #9FFFE6; {% else %} color: black; {% endif%}">
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                      <span class="align-middle" id="post_vote_{{post.id}}">{{post.votes.__len__()}}</span>
+                   </a>
+                </div>
+       </div>
+    </div>
+    {%if post.comments.__len__()!=0%}
+    <div class="card-body">
+        {% if post.comments!=[]%}
+       {{post.comments[0].comment}}
+       {% endif %}
+    </div>
+    {% endif %}
+ </div>
+{% endfor %}
+{% endblock body %}
